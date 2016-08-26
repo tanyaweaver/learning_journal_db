@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+{% extends "layout.jinja2" %}
+  {% block body %}
+
+        <div class=button>
+            <h3><a href="{{request.route_url('create')}}">Add New Entry</a></h3>
+        </div>
+    {% for entry in entries %}
+         <article class="single-entry">
+              <h3><a href="{{ request.route_url('detail', id=entry.id)}}">{{ entry.title }}</a></h3>
+              <h5>created on {{ entry.date }}</h5>
+          </article>
+    {% endfor %}
+
+  {% endblock %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+{% extends "layout.jinja2" %}
+  {% block body %}
+
+        <section class="single_entry">
+
+           <div class="entry-title">
+              <h3> {{ entry.title }}</h3>
+              <h5>created on {{ entry.date }}</h5>
+            </div>
+
+            <div class='entry_body'>
+              <p>{{ entry.body | safe}}</p>
+            </div>
+
+        </section>
+
+        <div class=button>
+            <h3><a href="{{ request.route_url('update', id=entry.id)}}">Edit</a></h3>
+        </div>
+
+  {% endblock %}

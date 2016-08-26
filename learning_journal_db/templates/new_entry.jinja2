@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+{% extends "layout.jinja2" %}
+  {% block body %}
+
+        <form class="single-entry">
+
+           <div class="entry-title">
+              <h3>Title:</h3>
+             <input class="new-entry-title">
+            </div>
+
+            <div class='entry-body'>
+              <h3>Notes:</h3>
+              <input class='new-entry-body'>
+            </div>
+
+            <div type=submit class="button">
+                <h3><a href='/'>Submit</a></h3>
+            </div>
+
+        </form>
+
+    {% endblock %}
