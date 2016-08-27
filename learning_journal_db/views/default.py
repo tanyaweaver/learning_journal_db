@@ -4,16 +4,93 @@ from pyramid.view import view_config
 from sqlalchemy.exc import DBAPIError
 
 from ..models import MyModel
+import transaction
+from ..models import (
+    get_engine,
+    get_session_factory,
+    get_tm_session,
+    )
+
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+
+ENTRIES = [
+     {
+        "title": "Day1",
+        "id": 1,
+        "date": "August 21, 2016",
+        "body": "Today I learned about Pyramid."
+     },
+     {
+        "title": "Day2",
+        "id": 2,
+        "date": "August 22, 2016",
+        "body": "Today I learned about heaps and templates."
+     },
+     {
+        "title": "Day3",
+        "id": 3,
+        "date": "August 23, 2016",
+        "body": "Today I learned about deploying to Heroku."
+     },
+     {
+        "title": "Day4",
+        "id": 4,
+        "date": "August 25, 2016",
+        "body": "Today I learned about deploying to birds."
+     },
+]
 
 
-@view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-def my_view(request):
+@view_config(route_name='lists', renderer='templates/home_page.jinja2')
+def lists(request):
     try:
         query = request.dbsession.query(MyModel)
-        one = query.filter(MyModel.name == 'one').first()
+        entries = query.all()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'learning_journal_db'}
+    return {"entries": entries}
+
+
+@view_config(route_name='create', renderer='templates/new_entry.jinja2')
+def create(request):
+    if request.method == 'GET':
+        return {}
+    if request.method == 'POST': 
+        new_title = request.POST['title']
+        new_body = request.POST['body']
+        entry = MyModel(title=new_title, body=new_body)
+        request.dbsession.add(entry)
+        return HTTPFound(request.route_url('lists'))
+
+
+@view_config(route_name='detail', renderer='templates/single_entry.jinja2')
+def detail(request):
+    try:
+        query = request.dbsession.query(MyModel)
+        entry = query.filter(MyModel.id == int(request.matchdict['id'])).first()
+    except DBAPIError:
+        return Response(db_err_msg, content_type='text/plain', status=500)
+    # if entry is None:
+    #     raise HTTPNotFound("Can't find what you are looking for.")
+    return {'entry': entry}
+
+
+@view_config(route_name='update', renderer='templates/edit_entry.jinja2')
+def update(request):
+    if request.method == "GET":
+        try:
+            query = request.dbsession.query(MyModel)
+
+            entry = query.filter(MyModel.id == int(request.matchdict['id'])).first()
+        except DBAPIError:
+            return Response(db_err_msg, content_type='text/plain', status=500)
+        return {'entry': entry}
+    elif request.method == 'POST':
+        new_title = request.POST['title']
+        new_body = request.POST['body']
+        entry = MyModel(title=new_title, body=new_body)
+        request.dbsession.add(entry)
+        return HTTPFound(request.route_url('lists'))
 
 
 db_err_msg = """\
