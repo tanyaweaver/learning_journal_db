@@ -1,16 +1,7 @@
 from pyramid.response import Response
 from pyramid.view import view_config
-
 from sqlalchemy.exc import DBAPIError
-
 from ..models import MyModel
-import transaction
-from ..models import (
-    get_engine,
-    get_session_factory,
-    get_tm_session,
-    )
-
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 ENTRIES = [
@@ -55,12 +46,16 @@ def lists(request):
 def create(request):
     if request.method == 'GET':
         return {}
-    if request.method == 'POST': 
+    if request.method == 'POST':
         new_title = request.POST['title']
         new_body = request.POST['body']
-        entry = MyModel(title=new_title, body=new_body)
-        request.dbsession.add(entry)
-        return HTTPFound(request.route_url('lists'))
+        if new_body != '' or new_title != '':
+            entry = MyModel(title=new_title, body=new_body)
+            request.dbsession.add(entry)
+            return HTTPFound(request.route_url('lists'))
+        else:
+            # error_msg = "Can't submit an empty entry."
+            return HTTPFound(request.route_url('create'))
 
 
 @view_config(route_name='detail', renderer='templates/single_entry.jinja2')
@@ -70,8 +65,8 @@ def detail(request):
         entry = query.filter(MyModel.id == int(request.matchdict['id'])).first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    # if entry is None:
-    #     raise HTTPNotFound("Can't find what you are looking for.")
+    # if 
+    #     return HTTPNotFound("Can't find what you are looking for.")
     return {'entry': entry}
 
 
@@ -80,7 +75,6 @@ def update(request):
     if request.method == "GET":
         try:
             query = request.dbsession.query(MyModel)
-
             entry = query.filter(MyModel.id == int(request.matchdict['id'])).first()
         except DBAPIError:
             return Response(db_err_msg, content_type='text/plain', status=500)
@@ -88,8 +82,9 @@ def update(request):
     elif request.method == 'POST':
         new_title = request.POST['title']
         new_body = request.POST['body']
-        entry = MyModel(title=new_title, body=new_body)
-        request.dbsession.add(entry)
+        if new_body != '' or new_title != '':
+            entry = MyModel(title=new_title, body=new_body)
+            request.dbsession.add(entry)
         return HTTPFound(request.route_url('lists'))
 
 

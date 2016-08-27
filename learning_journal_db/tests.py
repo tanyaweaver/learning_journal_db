@@ -1,13 +1,13 @@
 import pytest
 import transaction
 from pyramid import testing
-from models import (
+from .models import (
     get_engine,
     get_session_factory,
     get_tm_session,
 )
-from models.mymodel import MyModel
-from models.meta import Base
+from .models.mymodel import MyModel
+from .models.meta import Base
 
 
 @pytest.fixture(scope='session')
@@ -15,13 +15,13 @@ def sqlengine(request):
     config = testing.setUp(settings={
         'sqlalchemy.url': 'sqlite:///:memory:'
         })
-    config.include('..models')
+    config.include('.models')
     settings = config.get_settings()
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
 
     def teardown():
-        testing.teardown()
+        testing.tearDown()
         transaction.abort()
         Base.metadata.drop_all(engine)
 
