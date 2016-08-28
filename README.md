@@ -3,4 +3,7 @@
 * Home page: list of all journal entries
 * Can add a new entry or view/modify an existing entry
 * https://safe-bastion-86314.herokuapp.com/
-* test covearge py2/py3 79%
+### Test coverage py2/py3:
+* Step 2         100%
+* Step 3         79%
+* Step 4         80%
