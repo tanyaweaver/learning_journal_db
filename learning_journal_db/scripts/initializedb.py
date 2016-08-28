@@ -34,8 +34,8 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
 
-    engine = get_engine(settings)
-    Base.metadata.create_all(engine)
+    # engine = get_engine(settings)
+    # Base.metadata.create_all(engine)
 
     # session_factory = get_session_factory(engine)
 
