@@ -2,7 +2,8 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from sqlalchemy.exc import DBAPIError
 from ..models import MyModel
-from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from pyramid.httpexceptions import HTTPFound
+import email.utils
 
 ENTRIES = [
      {
@@ -32,8 +33,21 @@ ENTRIES = [
 ]
 
 
+def add_new_model(request):
+    """
+    Add new model to db using the values from the form.
+    A helper function for update() and create()."""
+    new_title = request.POST['title']
+    new_body = request.POST['body']
+    new_date = email.utils.formatdate(usegmt=True)
+    entry = MyModel(title=new_title, body=new_body, date=new_date)
+    request.dbsession.add(entry)
+    return {'entry': entry}
+
+
 @view_config(route_name='lists', renderer='templates/home_page.jinja2')
 def lists(request):
+    """Return all the entries from the database."""
     try:
         query = request.dbsession.query(MyModel)
         entries = query.all()
@@ -44,47 +58,44 @@ def lists(request):
 
 @view_config(route_name='create', renderer='templates/new_entry.jinja2')
 def create(request):
+    """
+    Display an empty form on "GET".
+    Create a new model and return to the home_page on "POST".
+    Display an err_msg if both 'title' and 'body' in the form are empty.
+    """
     if request.method == 'GET':
         return {}
     if request.method == 'POST':
-        new_title = request.POST['title']
-        new_body = request.POST['body']
-        if new_body != '' or new_title != '':
-            entry = MyModel(title=new_title, body=new_body)
-            request.dbsession.add(entry)
+        if request.POST['title'] != '' or request.POST['body'] != '':
+            add_new_model(request)
             return HTTPFound(request.route_url('lists'))
         else:
-            # error_msg = "Can't submit an empty entry."
-            return HTTPFound(request.route_url('create'))
+            error_msg = "Can't submit empty entry."
+            return {'error_msg': error_msg}
 
 
 @view_config(route_name='detail', renderer='templates/single_entry.jinja2')
 def detail(request):
+    """Display details of the entry with a particular id."""
     try:
         query = request.dbsession.query(MyModel)
-        entry = query.filter(MyModel.id == int(request.matchdict['id'])).first()
+        entry = query.filter(MyModel.id ==
+                             int(request.matchdict['id'])).first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    # if 
-    #     return HTTPNotFound("Can't find what you are looking for.")
     return {'entry': entry}
 
 
 @view_config(route_name='update', renderer='templates/edit_entry.jinja2')
 def update(request):
+    """
+    Display details of particular entry on "GET".
+    Create a new model and return to the home_page on "POST".
+    """
     if request.method == "GET":
-        try:
-            query = request.dbsession.query(MyModel)
-            entry = query.filter(MyModel.id == int(request.matchdict['id'])).first()
-        except DBAPIError:
-            return Response(db_err_msg, content_type='text/plain', status=500)
-        return {'entry': entry}
+        return detail(request)
     elif request.method == 'POST':
-        new_title = request.POST['title']
-        new_body = request.POST['body']
-        if new_body != '' or new_title != '':
-            entry = MyModel(title=new_title, body=new_body)
-            request.dbsession.add(entry)
+        add_new_model(request)
         return HTTPFound(request.route_url('lists'))
 
 
