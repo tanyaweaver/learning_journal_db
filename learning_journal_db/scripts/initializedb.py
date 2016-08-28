@@ -34,14 +34,14 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
 
-    engine = get_engine(settings)
-    Base.metadata.create_all(engine)
+    # engine = get_engine(settings)
+    # Base.metadata.create_all(engine)
 
-    session_factory = get_session_factory(engine)
+    # session_factory = get_session_factory(engine)
 
-    with transaction.manager:
-        dbsession = get_tm_session(session_factory, transaction.manager)
-        for entry in ENTRIES:
-            row = MyModel(id=entry['id'], title=entry['title'], 
-                          date=entry['date'], body=entry['body'])
-            dbsession.add(row)
+    # with transaction.manager:
+    #     dbsession = get_tm_session(session_factory, transaction.manager)
+    #     for entry in ENTRIES:
+    #         row = MyModel(id=entry['id'], title=entry['title'], 
+    #                       date=entry['date'], body=entry['body'])
+    #         dbsession.add(row)
