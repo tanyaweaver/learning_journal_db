@@ -1,0 +1,24 @@
+{% extends "layout.jinja2" %}
+  {% block body %}
+
+        <div class="single-entry">
+        <form action="{{ request.route_url('create') }}" method="POST">
+
+           <div class="entry-title">
+              <h3>Title:</h3>
+             <input class="new-entry-title" type="text" name="title"/>
+            </div>
+
+
+            <div class='entry-body'>
+              <h3>Notes:</h3>
+              <input class='new-entry-body'  type="text" name="body"/>
+            </div>
+
+            <input type=submit class="button" value="Submit"/><p>{{ error_msg }}</p> 
+
+
+        </form>
+        </div>
+
+{% endblock %}

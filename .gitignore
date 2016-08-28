@@ -2,9 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
-*.so
+<<<<<<< HEAD
+*.DS_Store
+*.pyc
 
 # Distribution / packaging
 .Python
@@ -23,6 +23,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+bin/*
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
