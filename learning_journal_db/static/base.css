@@ -61,6 +61,18 @@ input {
   justify-content: top;
 }
 
+.login input {
+  width: 20%;
+  border: solid;
+  border-color: #85929E;
+  font-size: 1rem;
+  justify-content: top;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+
 .new-entry-title {
   font-size: 1.4rem;
   height: 40px;

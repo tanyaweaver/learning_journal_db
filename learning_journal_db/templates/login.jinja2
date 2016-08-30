@@ -1,0 +1,23 @@
+{% extends "layout.jinja2" %}
+  {% block body %}
+
+        <form action="{{ request.route_url('lists') }}" method="POST">
+
+              <div class="login">
+              <label for="username">Username</label>
+              <input class="new-entry-title" type="text" name="username"/>
+              </div>
+
+              <div class="login">
+              <label for="password">Password</label>
+              <input class='new-entry-title'  type="password" name="password"/>
+              </div>
+              
+              <div>
+              <input class="button" type=submit  name="login" value="Login"/> 
+              </div>
+
+        </form>
+
+
+{% endblock %}

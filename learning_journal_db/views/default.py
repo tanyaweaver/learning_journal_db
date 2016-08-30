@@ -4,6 +4,18 @@ from sqlalchemy.exc import DBAPIError
 from ..models import MyModel
 from pyramid.httpexceptions import HTTPFound
 import email.utils
+from pyramid.security import remember, forget
+from learning_journal_db.security import check_credentials
+
+@view_config(route_name='login', renderer='templates/login.jinja2')
+def login(request):
+    if request.method == 'POST':
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if check_credentials(username, password):
+            headers = remember(request, username)
+            return HTTPFound(location=request.route_url('home'), headers=headers)
+    return {}
 
 ENTRIES = [
      {
@@ -45,7 +57,10 @@ def add_new_model(request):
     return {'entry': entry}
 
 
-@view_config(route_name='lists', renderer='templates/home_page.jinja2')
+@view_config(
+    route_name='lists',
+    renderer='templates/home_page.jinja2',
+)
 def lists(request):
     """Return all the entries from the database."""
     try:
@@ -56,7 +71,7 @@ def lists(request):
     return {"entries": entries}
 
 
-@view_config(route_name='create', renderer='templates/new_entry.jinja2')
+@view_config(route_name='create', renderer='templates/new_entry.jinja2', permission='view')
 def create(request):
     """
     Display an empty form on "GET".
@@ -97,6 +112,9 @@ def update(request):
     elif request.method == 'POST':
         add_new_model(request)
         return HTTPFound(request.route_url('lists'))
+
+
+
 
 
 db_err_msg = """\
