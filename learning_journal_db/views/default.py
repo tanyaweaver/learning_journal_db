@@ -7,15 +7,38 @@ import email.utils
 from pyramid.security import remember, forget
 from learning_journal_db.security import check_credentials
 
-@view_config(route_name='login', renderer='templates/login.jinja2')
+
+@view_config(
+    route_name='home', permission='view')
+def home(request):
+    if request.authenticated_userid:
+        return HTTPFound(request.route_url('lists'))
+    else:
+        return HTTPFound(request.route_url('login'))
+
+
+@view_config(
+    route_name='login',
+    renderer='templates/login.jinja2',
+    permission='view')
 def login(request):
+    msg = "Hi, please log in to see the journal."
     if request.method == 'POST':
         username = request.params.get('username', '')
         password = request.params.get('password', '')
         if check_credentials(username, password):
+            print('passed check')
             headers = remember(request, username)
-            return HTTPFound(location=request.route_url('home'), headers=headers)
-    return {}
+            return HTTPFound(request.route_url('lists'), headers=headers)
+        else:
+            msg = "Can't recognize username/password. Please try again."
+    return {'msg': msg}
+
+
+@view_config(route_name='logout')
+def logout(request):
+    headers = forget(request)
+    return HTTPFound(request.route_url('login'), headers=headers)
 
 ENTRIES = [
      {
@@ -60,18 +83,25 @@ def add_new_model(request):
 @view_config(
     route_name='lists',
     renderer='templates/home_page.jinja2',
+    permission='secret'
 )
 def lists(request):
     """Return all the entries from the database."""
+    #import pdb; pdb.set_trace()   
     try:
         query = request.dbsession.query(MyModel)
         entries = query.all()
+         
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {"entries": entries}
 
 
-@view_config(route_name='create', renderer='templates/new_entry.jinja2', permission='view')
+@view_config(
+    route_name='create',
+    renderer='templates/new_entry.jinja2',
+    permission='secret'
+)
 def create(request):
     """
     Display an empty form on "GET".
@@ -89,7 +119,11 @@ def create(request):
             return {'error_msg': error_msg}
 
 
-@view_config(route_name='detail', renderer='templates/single_entry.jinja2')
+@view_config(
+    route_name='detail',
+    renderer='templates/single_entry.jinja2',
+    permission='secret'
+    )
 def detail(request):
     """Display details of the entry with a particular id."""
     try:
@@ -101,7 +135,10 @@ def detail(request):
     return {'entry': entry}
 
 
-@view_config(route_name='update', renderer='templates/edit_entry.jinja2')
+@view_config(
+    route_name='update',
+    renderer='templates/edit_entry.jinja2',
+    permission='secret')
 def update(request):
     """
     Display details of particular entry on "GET".
@@ -112,9 +149,6 @@ def update(request):
     elif request.method == 'POST':
         add_new_model(request)
         return HTTPFound(request.route_url('lists'))
-
-
-
 
 
 db_err_msg = """\

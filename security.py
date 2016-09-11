@@ -8,6 +8,8 @@ from passlib.apps import custom_app_context as pwd_context
 
 
 def check_credentials(username, password):
+    #import pdb; pdb.set_trace()
+    print('in security')
     stored_username = os.environ.get('AUTH_USERNAME', '')
     stored_password = os.environ.get('AUTH_PASSWORD', '')
     is_authenticated = False
