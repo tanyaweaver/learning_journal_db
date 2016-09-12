@@ -16,8 +16,34 @@ from ..models import (
     get_tm_session,
     )
 from ..models import MyModel
-from ..views.default import ENTRIES
 
+
+ENTRIES = [
+     {
+        "title": "Day1",
+        "id": 1,
+        "date": "August 21, 2016",
+        "body": "Today I learned about Pyramid."
+     },
+     {
+        "title": "Day2",
+        "id": 2,
+        "date": "August 22, 2016",
+        "body": "Today I learned about heaps and templates."
+     },
+     {
+        "title": "Day3",
+        "id": 3,
+        "date": "August 23, 2016",
+        "body": "Today I learned about deploying to Heroku."
+     },
+     {
+        "title": "Day4",
+        "id": 4,
+        "date": "August 25, 2016",
+        "body": "Today I learned about deploying to birds."
+     },
+]
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -42,6 +68,6 @@ def main(argv=sys.argv):
     # with transaction.manager:
     #     dbsession = get_tm_session(session_factory, transaction.manager)
     #     for entry in ENTRIES:
-    #         row = MyModel(id=entry['id'], title=entry['title'], 
+    #         row = MyModel(id=entry['id'], title=entry['title'],
     #                       date=entry['date'], body=entry['body'])
     #         dbsession.add(row)
