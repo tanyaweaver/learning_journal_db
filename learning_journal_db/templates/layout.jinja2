@@ -3,31 +3,44 @@
 
     <head>
 
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href='https://fonts.googleapis.com/css?family=PT+Serif|Montserrat' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="../static/base.css">
+           <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link href='https://fonts.googleapis.com/css?family=PT+Serif|Montserrat' rel='stylesheet' type='text/css'>
+            <link rel="stylesheet" href="{{ request.static_url('learning_journal_db:static/base.css')}}">
 
     </head>
 
     <body>
 
         <header>
+
+              <div class="nav">
+
+              {% if request.authenticated_userid %}
+                       <li><h4 class="header"><a href="{{request.route_url('logout')}}">Log Out </a><h4></li>
+                       <li><h4><a href="{{request.route_url('lists')}}">Home</a></h4></li>
+              
+              {% endif %}
+                      
+
+              </div>
+
               <h1>Learning Journal<h1>
               <h3>Code 401 - Software Development in Python</h3>
               <h5>owner: Tatiana Weaver</h5>
-               <div class=button>
-                    <h3><a href="{{request.route_url('lists')}}">Home</a></h3>
-              </div>
-        </header>
 
-        <main>
-              {% block body %} {% endblock %}
-        </main>
+         </header>
+          <main>
+                    {% block body %} {% endblock %}
+             
+                    {% block section %} {% endblock %}
+         
+         </main>
+        </body>
 
-    </body>
+  
+        <div class="footer">
+              <p>Code Fellows | Code 401 - Python </p>
+        </div>
 
-    <footer>
-        <p>Code Fellows | Code 401 - Python </p>
-    </footer>
 
 </html>

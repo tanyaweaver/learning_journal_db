@@ -1,6 +1,6 @@
 {% extends "layout.jinja2" %}
   {% block body %}
-
+        <h4 class="error-msg">{{ error_msg }}</h4>
         <div class="single-entry">
 
         <form action="{{ request.route_url('update', id=entry.id) }}" method="POST">

@@ -14,6 +14,12 @@ header {
   padding-bottom: 20px;
 }
 
+.nav  li {
+  display: inline-block;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 body {
   width: 90%;
   text-align: center;
@@ -28,9 +34,11 @@ main {
   border-color: #85929E;
 }
 
-footer p {
-   margin: 0 auto;
+.footer {
+  width: max-content;
+  margin: 0 auto;
 }
+
 
 .button {
   margin: 0 auto;
@@ -61,6 +69,20 @@ input {
   justify-content: top;
 }
 
+.login input {
+  width: 20%;
+  border: solid;
+  border-color: #85929E;
+  font-size: 1rem;
+  justify-content: top;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.empty-space {
+  height: 300px;
+}
+
 .new-entry-title {
   font-size: 1.4rem;
   height: 40px;
@@ -87,6 +109,7 @@ p {
   font-size: 1rem;
   text-align: left;
 }
+
 a {
   text-decoration: none;
 }
@@ -95,6 +118,9 @@ a:hover {
   color: #880E4F;
 }
 
+.error-msg {
+  color: red;
+}
 @media (min-width: 640px) {
 
   h1 {

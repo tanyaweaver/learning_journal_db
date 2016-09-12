@@ -19,9 +19,13 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'psycopg2',
+    'passlib',
+    'requests',
+    'ipython'
     ]
 
 tests_require = [
+    'passlib',
     'WebTest >= 1.3.1',  # py3 compat
     'pytest',  # includes virtualenv
     'pytest-cov',

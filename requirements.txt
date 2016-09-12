@@ -5,9 +5,10 @@ decorator==4.0.10
 ipython==5.1.0
 ipython-genutils==0.1.0
 Jinja2==2.8
--e git+https://github.com/tanyaweaver/learning_journal_db@f72dff978b28c62cc0b6c3888a7a667ef413e5cb#egg=learning_journal_db
+-e git+https://github.com/tanyaweaver/learning_journal_db@febb0ec06656434f5df2cc36927c42c2c555a2c5#egg=learning_journal_db
 Mako==1.0.4
 MarkupSafe==0.23
+passlib==1.6.5
 PasteDeploy==1.5.2
 pexpect==4.2.1
 pickleshare==0.7.4
