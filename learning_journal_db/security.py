@@ -2,8 +2,6 @@ import os
 
 
 
-
-
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.exceptions import ConfigurationExecutionError
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -13,8 +11,10 @@ from pyramid.security import Allow
 
 def check_credentials(username, password):
     from passlib.apps import custom_app_context
-    stored_username = os.environ.get('AUTH_USERNAME', '')
-    stored_password = os.environ.get('AUTH_PASSWORD', '')
+    # stored_username = os.environ.get('AUTH_USERNAME', '')
+    # stored_password = os.environ.get('AUTH_PASSWORD', '')
+    stored_username = 'tw'
+    stored_password = '$6$rounds=696756$UWRWhhuKcNTbArn.$cGYtf5qzBAq0mKBTVcro9K051.oxV0gblPIe5LK25GahlwQnnEHaXWWYwQ1lX.w1czy/Xe/zJlDc84lafp7mW0'
     is_authenticated = False
     if stored_username and stored_password:
         if username == stored_username:
