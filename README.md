@@ -2,7 +2,7 @@
 ### Python web application implemented in Pyramid with Postgres.
 * Home page: list of all journal entries
 * Can add a new entry or view/modify an existing entry
-* https://lit-basin-60667.herokuapp.com
+* https://peaceful-crag-54362.herokuapp.com
 
 ### Test coverage py2/py3:
 * Step 2         100%
